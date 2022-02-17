@@ -4,22 +4,50 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
     <title>Заказы клиентов</title>
 </head>
 <body>
     <div class="wrapper">
         <aside class="form">
             <div class="form-wrapper">
-                <input type="text" class="form-wrapper-catalog">
-                <input type="text" class="form-wrapper-description">
-                <input type="date">
+                <div>
+                    <p>Каталог:</p>
+                    <input type="text" class="form-wrapper-catalog" placeholder="Введите каталожный номер">
+                </div>
+                <div>
+                    <p>Название:</p>
+                    <input type="text" class="form-wrapper-description" placeholder="Введите название">
+                </div>
+                <div>
+                    <p>Телефон:</p>
+                    <input type="text" class="form-wrapper-phone" placeholder="Введите телефон">
+                </div>   
+                <div>
+                    <p>Дата получения:</p>
+                    <input type="text" class="form-wrapper-date" placeholder="Введите дату получения">
+                </div>               
+                <button type="submit" class="add-btn">Добавить</button>
+                <button class="remove-btn">Удалить выданные</button>
             </div>
         </aside>
         <aside class="table">
             <div class="table-wrapper">
-                
+                <table width="100%" border="1">
+                    <tr>
+                        <th>Каталог</th>
+                        <th>Название</th>
+                        <th>Телефон</th>
+                        <th>Дата создания</th>
+                        <th>Дата получения</th>
+                    </tr>
+                    <div class="main-table">
+
+                    </div>
+                </table>
             </div>
         </aside>
     </div>
+    <script src="index.js"></script>
 </body>
 </html>
