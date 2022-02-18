@@ -11,17 +11,7 @@ const itemCatalog = document.querySelector('.form-wrapper-catalog'),
 
 function createNewItem (catalog, discriprion, phone, deliveryDate) {
 
-    let item =  {
-        catalog:'',
-        discriprion: '',
-        phone: '',
-        creationDate: '',
-        deliveryDate: ''
-    }
-
-
     let newItem = document.createElement('tr')
-
 
     newItem.classList.add('table-item')
     newItem.innerHTML = `<td>${catalog}</td>
@@ -62,11 +52,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (localStorage.length) {
         for (let key in localStorage) {
             if (localStorage.hasOwnProperty(key)) {
-
                 let newItem = document.createElement('tr')
+
                 newItem.classList.add('table-item')
                 newItem.innerHTML = localStorage[key]
-
 
                 table.append(newItem)
 
@@ -79,15 +68,19 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 
-// removeBtn.addEventListener('click', () => {
-//     const tableItems = document.querySelectorAll('.table-item')
-//     let filtredTable = ''
-//     console.log(tableItems)
-//     tableItems.forEach(item => {
-//         if (!item.classList.contains('completed')) {
-//             filtredTable += item.outerHTML
-//         }
-//     })
-
-//     table.innerHTML = filtredTable
-// })
+removeBtn.addEventListener('click', () => {
+    const tableItems = document.querySelectorAll('.table-item')
+  
+    tableItems.forEach(item => {
+        if (item.classList.contains('completed')) {
+            item.remove()
+            for(let key in localStorage) {
+                if (localStorage.hasOwnProperty(key)) {
+                    if (localStorage[key] === item.innerHTML) {
+                        localStorage.removeItem(key)
+                    }
+                }
+            }
+        }
+    })
+})
