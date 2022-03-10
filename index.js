@@ -1,34 +1,47 @@
+
+
 const itemCatalog = document.querySelector('.form-wrapper-catalog'),
       itemDiscription = document.querySelector('.form-wrapper-description'),
       itemDate = document.querySelector('.form-wrapper-date'),
       itemPhone = document.querySelector('.form-wrapper-phone'),
       addButton = document.querySelector('.add-btn'),
       table = document.querySelector('table'),
-      removeBtn = document.querySelector('.remove-btn'),
-      mainTable = document.querySelector('.main-table')
+      removeBtn = document.querySelector('.remove-btn')
 
-      
 
-function createNewItem (catalog, discriprion, phone, deliveryDate) {
+let itemMap = {}
+
+function createNewItem (catalog, discription, phone, deliveryDate) {
 
     let newItem = document.createElement('tr')
 
+    let item = {
+        catalog: catalog,
+        discription: discription,
+        phone: phone,
+        creationDate: new Date().toLocaleDateString(),
+        deliveryDate: deliveryDate
+    }
+
+    itemMap[`item${uniqid('', true)}`] = item
+
+    sendJSON(itemMap)
+
+
     newItem.classList.add('table-item')
     newItem.innerHTML = `<td>${catalog}</td>
-                         <td>${discriprion}</td>
+                         <td>${discription}</td>
                          <td>${phone}</td>
                          <td>${new Date().toLocaleDateString()}</td>
                          <td>${deliveryDate}</td>
                         `
-    if (catalog && discriprion && phone && deliveryDate) {
+    if (catalog && discription && phone && deliveryDate) {
 
         table.append(newItem)
 
         newItem.addEventListener('click', () => {
             newItem.classList.toggle('completed')
         })
-
-        localStorage.setItem(`item${localStorage.length}`,newItem.innerHTML)
     }
 }
 
@@ -49,22 +62,37 @@ addButton.addEventListener('click', e => {
 
 
 document.addEventListener('DOMContentLoaded', () => {
-    if (localStorage.length) {
-        for (let key in localStorage) {
-            if (localStorage.hasOwnProperty(key)) {
-                let newItem = document.createElement('tr')
+    fetch("https://api.jsonbin.io/v3/b/621dd351a703bb67491f066f/versions/count")
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            fetch(`https://api.jsonbin.io/v3/b/621dd351a703bb67491f066f/${data.metaData.versionCount ? data.metaData.versionCount : '' }`)
+                .then(res => res.json())
+                .then(items => {
+                    itemMap = items.record
 
-                newItem.classList.add('table-item')
-                newItem.innerHTML = localStorage[key]
+                    for(let key in itemMap) {
+                        const item = itemMap[key]
 
-                table.append(newItem)
+                        let newItem = document.createElement('tr')
 
-                newItem.addEventListener('click', () => {
-                    newItem.classList.toggle('completed')
+                        newItem.classList.add('table-item')
+
+                        newItem.innerHTML = `<td>${item.catalog}</td>
+                                            <td>${item.discription}</td>
+                                            <td>${item.phone}</td>
+                                            <td>${item.creationDate}</td>
+                                            <td>${item.deliveryDate}</td>
+                                             `
+
+                        table.append(newItem)
+
+                        newItem.addEventListener('click', () => {
+                            newItem.classList.toggle('completed')
+                        })
+                    }
                 })
-            }
-        }
-    }
+        })
 })
 
 
@@ -74,13 +102,32 @@ removeBtn.addEventListener('click', () => {
     tableItems.forEach(item => {
         if (item.classList.contains('completed')) {
             item.remove()
-            for(let key in localStorage) {
-                if (localStorage.hasOwnProperty(key)) {
-                    if (localStorage[key] === item.innerHTML) {
-                        localStorage.removeItem(key)
-                    }
-                }
+
+            for (let key in itemMap) {
+                if (item.firstElementChild.innerText === itemMap[key].catalog) {
+                     delete itemMap[key]
+                 }
             }
         }
-    })
+    });
+
+    sendJSON(itemMap)
 })
+
+function uniqid(prefix = "", random = false) {
+    const sec = Date.now() * 1000 + Math.random() * 1000;
+    const id = sec.toString(16).replace(/\./g, "").padEnd(14, "0");
+    return `${prefix}${id}${
+      random ? `.${Math.trunc(Math.random() * 100000000)}` : ""
+    }`;
+  }
+
+  function sendJSON (items) {
+    fetch('https://api.jsonbin.io/v3/b/621dd351a703bb67491f066f', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(items)
+                })
+  }
