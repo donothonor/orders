@@ -13,7 +13,7 @@
             <div class="form-wrapper">
                 <div>
                     <p>Каталог:</p>
-                    <input type="text" class="form-wrapper-catalog" placeholder="Введите каталожный номер...git ">
+                    <input type="text" class="form-wrapper-catalog" placeholder="Введите каталожный номер...">
                 </div>
                 <div>
                     <p>Название:</p>
@@ -26,6 +26,14 @@
                 <div>
                     <p>Дата получения:</p>
                     <input type="text" class="form-wrapper-date" placeholder="Введите дату получения...">
+                </div>
+                <div>
+                    <p>Количество:</p>
+                    <input type="text" class="form-wrapper-amount" placeholder="Введите дату получения...">
+                </div>
+                <div>
+                    <p>Цена закупки:</p>
+                    <input type="text" class="form-wrapper-price" placeholder="Введите цену закупки...">
                 </div>               
                 <button type="submit" class="add-btn">Добавить</button>
                 <button class="remove-btn">Удалить выданные</button>
@@ -40,6 +48,8 @@
                         <th>Телефон</th>
                         <th>Дата создания</th>
                         <th>Дата получения</th>
+                        <th>Кол-во</th>
+                        <th>Цена за шт.</th>
                     </tr>
                     <div class="main-table">
 
@@ -49,5 +59,6 @@
         </aside>
     </div>
     <script src="index.js"></script>
+    <script src="calculations.js"></script>
 </body>
 </html>
