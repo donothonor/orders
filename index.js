@@ -11,37 +11,40 @@ const itemCatalog = document.querySelector('.form-wrapper-catalog'),
 
 let itemMap = {}
 
-function createNewItem (catalog, discription, phone, deliveryDate) {
-
-    let newItem = document.createElement('tr')
-
-    let item = {
-        catalog: catalog,
-        discription: discription,
-        phone: phone,
-        creationDate: new Date().toLocaleDateString(),
-        deliveryDate: deliveryDate
-    }
-
-    itemMap[`item${uniqid('', true)}`] = item
-
-    sendJSON(itemMap)
-
-
-    newItem.classList.add('table-item')
-    newItem.innerHTML = `<td>${catalog}</td>
-                         <td>${discription}</td>
-                         <td>${phone}</td>
-                         <td>${new Date().toLocaleDateString()}</td>
-                         <td>${deliveryDate}</td>
-                        `
+function createNewItem (catalog, discription, phone, creationDate, deliveryDate, isFetched) {
+    
     if (catalog && discription && phone && deliveryDate) {
+
+        let newItem = document.createElement('tr')
+
+        newItem.classList.add('table-item')
+        newItem.innerHTML = `<td>${catalog}</td>
+                            <td>${discription}</td>
+                            <td>${phone}</td>
+                            <td>${creationDate ? creationDate : new Date().toLocaleDateString()}</td>
+                            <td>${deliveryDate}</td>
+                            `
 
         table.append(newItem)
 
         newItem.addEventListener('click', () => {
             newItem.classList.toggle('completed')
         })
+
+        if (!isFetched) {
+
+            const item = {
+                catalog: catalog,
+                discription: discription,
+                phone: phone,
+                creationDate: new Date().toLocaleDateString(),
+                deliveryDate: deliveryDate
+            }
+    
+            itemMap[`item${uniqid('', true)}`] = item
+    
+            sendJSON(itemMap)
+        }
     }
 }
 
@@ -50,7 +53,7 @@ function createNewItem (catalog, discription, phone, deliveryDate) {
 
 addButton.addEventListener('click', e => {
 
-    createNewItem(itemCatalog.value, itemDiscription.value,itemPhone.value, itemDate.value)
+    createNewItem(itemCatalog.value, itemDiscription.value, itemPhone.value, '', itemDate.value, false)
 
     itemCatalog.value = ''
     itemDiscription.value = ''
@@ -65,7 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch("https://api.jsonbin.io/v3/b/621dd351a703bb67491f066f/versions/count")
         .then(response => response.json())
         .then(data => {
-            console.log(data)
             fetch(`https://api.jsonbin.io/v3/b/621dd351a703bb67491f066f/${data.metaData.versionCount ? data.metaData.versionCount : '' }`)
                 .then(res => res.json())
                 .then(items => {
@@ -74,22 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     for(let key in itemMap) {
                         const item = itemMap[key]
 
-                        let newItem = document.createElement('tr')
-
-                        newItem.classList.add('table-item')
-
-                        newItem.innerHTML = `<td>${item.catalog}</td>
-                                            <td>${item.discription}</td>
-                                            <td>${item.phone}</td>
-                                            <td>${item.creationDate}</td>
-                                            <td>${item.deliveryDate}</td>
-                                             `
-
-                        table.append(newItem)
-
-                        newItem.addEventListener('click', () => {
-                            newItem.classList.toggle('completed')
-                        })
+                        createNewItem(item.catalog, item.discription, item.phone, item.creationDate, item.deliveryDate, true)
                     }
                 })
         })
