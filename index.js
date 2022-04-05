@@ -78,6 +78,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         createNewItem(item.catalog, item.discription, item.phone, item.creationDate, item.deliveryDate, true)
                     }
+
+                    Array.from(table.children)
+                        .filter((item, index) => index !== 0)
+                        .forEach(item => {
+                            
+                            const deliveryDate = item.children[4]
+                            
+
+                            if (deliveryDate.innerHTML === new Date().toLocaleDateString()) {
+                                item.classList.add('blue')
+                            }
+                        })
                 })
         })
 })
@@ -118,3 +130,4 @@ function uniqid(prefix = "", random = false) {
                     body: JSON.stringify(items)
                 })
   }
+
