@@ -60,7 +60,7 @@ addButton.addEventListener('click', e => {
 
     createNewItem(itemCatalog.value, itemDiscription.value, itemPhone.value, null, itemDate.value, itemAmount.value, itemPrice.value, false)
 
-    itemCatalog = itemDiscription = itemDate = itemPhone  = itemAmount = itemPrice = ''
+    itemCatalog.value = itemDiscription.value = itemDate.value = itemPhone.value  = itemAmount.value = itemPrice.value = ''
 })      
 
 
