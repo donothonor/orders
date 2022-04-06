@@ -58,12 +58,9 @@ function createNewItem (catalog, discription, phone, creationDate, deliveryDate,
 
 addButton.addEventListener('click', e => {
 
-    createNewItem(itemCatalog.value, itemDiscription.value, itemPhone.value, '', itemDate.value, itemAmount.value, itemPrice.value, false)
+    createNewItem(itemCatalog.value, itemDiscription.value, itemPhone.value, null, itemDate.value, itemAmount.value, itemPrice.value, false)
 
-    itemCatalog.value = ''
-    itemDiscription.value = ''
-    itemDate.value = ''
-    itemPhone.value = ''
+    itemCatalog = itemDiscription = itemDate = itemPhone  = itemAmount = itemPrice = ''
 })      
 
 
@@ -124,7 +121,7 @@ function uniqid(prefix = "", random = false) {
     return `${prefix}${id}${
       random ? `.${Math.trunc(Math.random() * 100000000)}` : ""
     }`;
-  }
+}
 
   function sendJSON (items) {
     fetch('https://api.jsonbin.io/v3/b/621dd351a703bb67491f066f', {
@@ -134,7 +131,7 @@ function uniqid(prefix = "", random = false) {
                     },
                     body: JSON.stringify(items)
                 })
-  }
+}
 
   function calculate(price) {
     if (price >= 0 && price < 50) {
